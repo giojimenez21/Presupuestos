@@ -12,6 +12,7 @@ namespace Presupuestos.Services
         Task<bool> Existe(string nombre, int usuarioId);
         Task<IEnumerable<Tipocuenta>> Obtener(int usuarioId);
         Task<Tipocuenta> ObtenerPorId(int id, int usuarioId);
+        Task Ordenar(IEnumerable<Tipocuenta> tiposCuentas);
     }
 
     public class TiposCuentas : IRepositorioTiposCuentas
@@ -25,9 +26,7 @@ namespace Presupuestos.Services
         public async Task Crear(Tipocuenta tipoCuenta)
         {
             using var connection = new SqlConnection(connectionString);
-            var id = await connection.QuerySingleAsync<int>(@"INSERT INTO TiposCuentas(Nombre, UsuarioId, Orden)
-            Values (@Nombre, @UsuarioId, 0);
-            SELECT SCOPE_IDENTITY();", tipoCuenta);
+            var id = await connection.QuerySingleAsync<int>("TiposCuentasInsertar", new { usuarioId = tipoCuenta.UsuarioId, nombre = tipoCuenta.Nombre }, commandType: System.Data.CommandType.StoredProcedure);
             tipoCuenta.Id = id;
         }
 
@@ -41,7 +40,7 @@ namespace Presupuestos.Services
         public async Task<IEnumerable<Tipocuenta>> Obtener(int usuarioId)
         {
             using var connection = new SqlConnection(connectionString);
-            return await connection.QueryAsync<Tipocuenta>(@"SELECT * FROM TiposCuentas WHERE UsuarioId=@UsuarioId", new { usuarioId });
+            return await connection.QueryAsync<Tipocuenta>(@"SELECT * FROM TiposCuentas WHERE UsuarioId=@UsuarioId ORDER BY Orden", new { usuarioId });
         }
 
         public async Task Actualizar(Tipocuenta tipocuenta)
@@ -61,6 +60,13 @@ namespace Presupuestos.Services
             using var connection = new SqlConnection(connectionString);
             await connection.ExecuteAsync(@"DELETE TiposCuentas WHERE id = @id", new { id });
 
+        }
+
+        public async Task Ordenar(IEnumerable<Tipocuenta> tiposCuentas)
+        {
+            using var connection = new SqlConnection(connectionString);
+            var query = "UPDATE TiposCuentas SET Orden = @Orden WHERE Id = @Id;";
+            await connection.ExecuteAsync(query, tiposCuentas);
         }
     }
 }
