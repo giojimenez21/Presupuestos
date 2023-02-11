@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Presupuestos.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="ManejoPresupuesto.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/fullCalendar/main.min.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -27,7 +28,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="TiposCuentas" asp-action="Index">TiposCuentas</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Transacciones" asp-action="Index">Transacciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cuentas" asp-action="Index">Cuentas</a>
+                        </li>
                     </ul>
+                    <partial name="_LinksLogin" />
                 </div>
             </div>
         </nav>

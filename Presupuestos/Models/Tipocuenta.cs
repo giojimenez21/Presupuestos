@@ -11,7 +11,7 @@ namespace Presupuestos.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(maximumLength: 50, MinimumLength = 3, ErrorMessage = "La longitud del campo {0} debe estar entre {2} y {1}")]
         [Display(Name = "Nombre del tipo cuenta")]
-        [Remote(action: "VerificarExisteTipoCuenta", controller:"TiposCuentas")]
+        [Remote(action: "VerificarExisteTipoCuenta", controller:"TiposCuentas", AdditionalFields = "Id")]
         //[PrimeraMayuscula]
         public string Nombre { get; set; }
         public int UsuarioId { get; set; }
